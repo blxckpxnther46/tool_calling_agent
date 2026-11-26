@@ -14,12 +14,24 @@ api_key = st.sidebar.text_input(
     help="Get a free key at aistudio.google.com."
 )
 
-model_name = st.sidebar.selectbox(
+model_options = [
+    "gemini-3.5-flash-lite",
+    "gemini-2.5-flash-lite",
+    "gemini-2.0-flash-lite",
+    "gemini-1.5-flash",
+    "gemini-2.0-flash",
+    "Custom model name..."
+]
+selected_model = st.sidebar.selectbox(
     "Gemini Model",
-    ["gemini-1.5-flash", "gemini-2.0-flash", "gemini-1.5-pro"],
+    model_options,
     index=0,
-    help="Default is gemini-1.5-flash. Select gemini-2.0-flash if desired."
+    help="Default is gemini-3.5-flash-lite. Select or type your active model."
 )
+if selected_model == "Custom model name...":
+    model_name = st.sidebar.text_input("Enter model name", value="gemini-3.5-flash-lite")
+else:
+    model_name = selected_model
 
 if st.sidebar.button("Clear chat"):
     st.session_state.pop("chat", None)

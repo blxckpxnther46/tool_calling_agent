@@ -7,9 +7,18 @@ from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode, tools_condition
 from tools import TOOLS
 
-CHAT_MODEL = "gemini-1.5-flash"
+CHAT_MODEL = "gemini-3.5-flash-lite"
 MAX_HISTORY = 10  # how many past messages to send back each time
 STEP_LIMIT = 12   # most node runs allowed for one question (each node run is one step)
+
+def normalize_model_name(name: str) -> str:
+    """Normalize model string formats (e.g. '3.5 flash lite' -> 'gemini-3.5-flash-lite')."""
+    cleaned = str(name).strip()
+    if not cleaned:
+        return CHAT_MODEL
+    if not cleaned.startswith("gemini-") and not cleaned.startswith("models/"):
+        cleaned = "gemini-" + cleaned.replace(" ", "-")
+    return cleaned
 
 SYSTEM_PROMPT = """You are the Apex Hardware Stock Helper, a dedicated assistant for inventory monitoring, restock budgeting, and purchase order drafting at Apex Hardware store.
 
@@ -27,7 +36,8 @@ class AgentState(TypedDict):
 
 
 def make_llm(api_key, model=CHAT_MODEL):
-    return ChatGoogleGenerativeAI(model=model, temperature=0.3, google_api_key=api_key)
+    model_name = normalize_model_name(model or CHAT_MODEL)
+    return ChatGoogleGenerativeAI(model=model_name, temperature=0.3, google_api_key=api_key)
 
 
 def text_of(content):
