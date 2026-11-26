@@ -7,7 +7,7 @@ from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode, tools_condition
 from tools import TOOLS
 
-CHAT_MODEL = "gemini-2.5-flash"
+CHAT_MODEL = "gemini-1.5-flash"
 MAX_HISTORY = 10  # how many past messages to send back each time
 STEP_LIMIT = 12   # most node runs allowed for one question (each node run is one step)
 
@@ -26,8 +26,8 @@ class AgentState(TypedDict):
     messages: Annotated[list[AnyMessage], add_messages]
 
 
-def make_llm(api_key):
-    return ChatGoogleGenerativeAI(model=CHAT_MODEL, temperature=0.3, google_api_key=api_key)
+def make_llm(api_key, model=CHAT_MODEL):
+    return ChatGoogleGenerativeAI(model=model, temperature=0.3, google_api_key=api_key)
 
 
 def text_of(content):

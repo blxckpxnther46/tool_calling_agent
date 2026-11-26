@@ -14,6 +14,13 @@ api_key = st.sidebar.text_input(
     help="Get a free key at aistudio.google.com."
 )
 
+model_name = st.sidebar.selectbox(
+    "Gemini Model",
+    ["gemini-1.5-flash", "gemini-2.0-flash", "gemini-1.5-pro"],
+    index=0,
+    help="Default is gemini-1.5-flash. Select gemini-2.0-flash if desired."
+)
+
 if st.sidebar.button("Clear chat"):
     st.session_state.pop("chat", None)
     st.session_state.pop("history", None)
@@ -45,9 +52,10 @@ if "chat" not in st.session_state:
 if "history" not in st.session_state:
     st.session_state.history = []  # format: list of AnyMessage
 
-if st.session_state.get("graph_key") != api_key:
-    st.session_state.graph = agent_core.build_graph(agent_core.make_llm(api_key))
-    st.session_state.graph_key = api_key
+cache_key = (api_key, model_name)
+if st.session_state.get("graph_key") != cache_key:
+    st.session_state.graph = agent_core.build_graph(agent_core.make_llm(api_key, model=model_name))
+    st.session_state.graph_key = cache_key
 
 for role, text, steps, stopped in st.session_state.chat:
     with st.chat_message(role):
@@ -69,7 +77,7 @@ if question:
         )
     except Exception as e:
         answer, steps, stopped = (
-            f"Something went wrong ({type(e).__name__}). Check your key and try again in a minute.",
+            f"Something went wrong ({type(e).__name__}: {e}). Check your key or selected model and try again.",
             [],
             False,
         )
