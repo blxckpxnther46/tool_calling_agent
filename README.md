@@ -1,6 +1,7 @@
 # Apex Hardware Stock Helper
 
-**Live app:** https://apex-hardware-agent.streamlit.app (paste your own free Gemini key in the sidebar)
+**Live app:** https://tool-calling-agent.streamlit.app (paste your own free Gemini key in the sidebar)
+**GitHub Repository:** https://github.com/blxckpxnther46/tool_calling_agent
 
 ## Topic and user
 This agent is built for hardware shop managers and inventory staff at Apex Hardware & Tool Shop. It automates inventory lookups, calculates restocking costs with realistic shipping and tax rates, and drafts supplier purchase order inquiries for human review.
